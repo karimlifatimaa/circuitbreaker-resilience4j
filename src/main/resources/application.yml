@@ -14,11 +14,23 @@ resilience4j:
   circuitbreaker:
     instances:
       studentService:
+        # Actuator endpoints-də bu circuit breaker-i göstər
         registerHealthIndicator: true
-        slidingWindowSize: 5
-        minimumNumberOfCalls: 3
+        # Sliding Window (Sürüşən Pəncərə): Son 10 sorğunun nəticəsinə bax
+        slidingWindowSize: 10
+        # Circuit Breaker-in işə düşməsi üçün ən azı 5 sorğu gəlməlidir
+        minimumNumberOfCalls: 5
+        # Half-Open (Yarım-açıq) rejimdə ancaq 3 sınaq sorğusuna icazə ver
         permittedNumberOfCallsInHalfOpenState: 3
+        # Half-Open rejimdən avtomatik Closed rejiminə keç (əgər hər şey düzəlibsə)
         automaticTransitionFromOpenToHalfOpenEnabled: true
+        # Open (Açıq) rejimdə nə qədər gözləsin? (10 saniyə sonra sınaq edəcək)
         waitDurationInOpenState: 10s
+        # Xəta Limiti: Əgər sorğuların 50%-i xəta versə, dövrəni qır (Open et)
         failureRateThreshold: 50
+        # Actuator-da axırıncı 10 hadisəni (event) yadda saxla
         eventConsumerBufferSize: 10
+        # Yavaş Cavab Limiti: Əgər cavab 2 saniyədən gec gəlsə, bunu "yavaş" say
+        slowCallDurationThreshold: 2s
+        # Yavaş Cavab Faizi: Əgər sorğuların 50%-i "yavaş" olsa, dövrəni qır
+        slowCallRateThreshold: 50

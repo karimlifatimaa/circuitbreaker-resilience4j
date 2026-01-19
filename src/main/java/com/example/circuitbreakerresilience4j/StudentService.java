@@ -13,13 +13,12 @@ public class StudentService {
     }
 
     @CircuitBreaker(name = "studentService", fallbackMethod = "fallbackMethod")
-    public String checkStudentStatus() {
-
+    public LibraryStatus checkStudentStatus() {
         return externalService.checkLibraryExistance();
     }
 
-    public String fallbackMethod(Exception e) {
-
-        return "Fallback: Library is unavailable. Assuming student is clear.";
+    public LibraryStatus fallbackMethod(Exception e) {
+        return new LibraryStatus("FALLBACK",
+                "Library is unavailable. Assuming student is clear. Error: " + e.getMessage());
     }
 }
